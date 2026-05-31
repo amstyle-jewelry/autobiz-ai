@@ -63,4 +63,25 @@ if show_app:
                 st.info("Lead 2: Amazon Prime Distributor, USA - Match: 94% - Status: Pending")
                 st.info("Lead 3: TikTok Shop Influencer, UK - Match: 91% - Status: Outreach Done")
                 st.success("Proposals successfully sent by A.m Style AI Agent.")
-                
+                # Purana code jahan photo upload hoti hai
+uploaded_file = st.file_uploader("Upload Product Photo", type=["jpg", "png"])
+
+if uploaded_file is not None:
+    st.image(uploaded_file, caption="Uploaded Product")
+    
+    # YE NAYE FIELDS YAHAN ADD HOGE:
+    st.write("### Product Details")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        weight = st.text_input("Weight (Grams)")
+    with col2:
+        carat = st.text_input("Carat (e.g. 22K)")
+    with col3:
+        price = st.text_input("Price ($)")
+
+    # "Execute Global AI Hunt" button wala hissa
+    if st.button("Execute Global AI Hunt"):
+        # Yahan aapka AI function call hoga, 
+        # jismein aap ab in variables (weight, carat, price) ko bhi bhej sakte hain
+        st.success(f"Proposal sent with details: {weight}g, {carat}, ${price}")
+        
