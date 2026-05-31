@@ -84,4 +84,12 @@ if uploaded_file is not None:
         # Yahan aapka AI function call hoga, 
         # jismein aap ab in variables (weight, carat, price) ko bhi bhej sakte hain
         st.success(f"Proposal sent with details: {weight}g, {carat}, ${price}")
-        
+        # Material select karne ke liye code
+material = st.selectbox("Select Material", ["Gold", "Silver"])
+
+# Jab proposal bhejna ho, toh material ko bhi include karein
+if st.button("Execute Global AI Hunt"):
+    # Proposal message mein material add kar dein
+    proposal_text = f"Proposal sent with details: {weight}g, {carat}K, ${price}, Material: {material}"
+    st.success(proposal_text)
+    
