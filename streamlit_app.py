@@ -1,5 +1,4 @@
-
-  import streamlit as st
+import streamlit as st
 import time
 
 # UI: Professional App Look
