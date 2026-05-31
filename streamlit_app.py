@@ -52,44 +52,33 @@ else:
 
 # Main AI Functionality
 if show_app:
-    uploaded_file = st.file_uploader("Upload Product Photo", type=['jpg', 'png'])
+    
+if show_app:
+    uploaded_file = st.file_uploader("Upload Product Photo", type=['jpg', 'png'], key="main_upload")
     if uploaded_file:
         st.image(uploaded_file, caption="Analyzing Product Features...")
-        if st.button("🚀 Execute Global AI Hunt"):
-            with st.spinner("A.m Style AI is scanning global markets..."):
+        
+        # Details inputs
+        c1, c2, c3 = st.columns(3)
+        weight = c1.text_input("Weight (Grams)")
+        carat = c2.text_input("Carat (e.g. 22K)")
+        price = c3.text_input("Price ($)")
+        material = st.selectbox("Select Material", ["Gold", "Silver"])
+        
+        if st.button("Execute Global AI Hunt"):
+            with st.spinner("AI is scanning global markets..."):
                 time.sleep(3) # AI Simulation
-                st.write("### 🌐 Global Leads Identified:")
+                
+                # Sabhi details ke sath display
+                st.write("### Product & Market Analysis")
+                st.write(f"**Material:** {material}")
+                st.write(f"**Weight:** {weight}g | **Carat:** {carat} | **Price:** ${price}")
+                
+                st.write("🌐 **Global Leads Identified:**")
                 st.info("Lead 1: Alibaba Wholesaler, China - Match: 98% - Status: Contacted")
                 st.info("Lead 2: Amazon Prime Distributor, USA - Match: 94% - Status: Pending")
                 st.info("Lead 3: TikTok Shop Influencer, UK - Match: 91% - Status: Outreach Done")
-                st.success("Proposals successfully sent by A.m Style AI Agent.")
-                # Purana code jahan photo upload hoti hai
-uploaded_file = st.file_uploader("Upload Product Photo", type=["jpg", "png"])
-
-if uploaded_file is not None:
-    st.image(uploaded_file, caption="Uploaded Product")
-    
-    # YE NAYE FIELDS YAHAN ADD HOGE:
-    st.write("### Product Details")
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        weight = st.text_input("Weight (Grams)")
-    with col2:
-        carat = st.text_input("Carat (e.g. 22K)")
-    with col3:
-        price = st.text_input("Price ($)")
-
-    # "Execute Global AI Hunt" button wala hissa
-    if st.button("Execute Global AI Hunt"):
-        # Yahan aapka AI function call hoga, 
-        # jismein aap ab in variables (weight, carat, price) ko bhi bhej sakte hain
-        st.success(f"Proposal sent with details: {weight}g, {carat}, ${price}")
-        # Material select karne ke liye code
-material = st.selectbox("Select Material", ["Gold", "Silver"])
-
-# Jab proposal bhejna ho, toh material ko bhi include karein
-if st.button("Execute Global AI Hunt"):
-    # Proposal message mein material add kar dein
-    proposal_text = f"Proposal sent with details: {weight}g, {carat}K, ${price}, Material: {material}"
-    st.success(proposal_text)
-    
+                
+                # Final confirmation message
+                st.success(f"Proposal sent for {material} ({weight}g, {carat}, ${price}) successfully.")
+        
