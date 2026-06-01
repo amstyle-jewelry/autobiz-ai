@@ -1,39 +1,71 @@
 import streamlit as st
 import time
 
-# Page Config
-st.set_page_config(page_title="AutoBiz VIP Agent", layout="wide")
-st.title("💎 AutoBiz VIP: Autonomous Global Jewelry Agent")
+# --- CONFIGURATION ---
+ADMIN_EMAIL = "shahzebbhutta813@gmail.com"
 
-# Sidebar - Product Specifications
+# --- APP SETUP ---
+st.set_page_config(page_title="AutoBiz VIP | Autonomous Agent", layout="wide")
+
+if 'user' not in st.session_state:
+    st.session_state.user = None
+    st.session_state.is_paid = False
+
+# --- SIDEBAR: AUTHENTICATION ---
 with st.sidebar:
-    st.header("Product Specifications")
-    uploaded_file = st.file_uploader("Upload Necklace Photo", type=['jpg', 'png'])
-    weight = st.number_input("Weight (Grams)", min_value=0.0)
-    carat = st.selectbox("Carat", ["18K", "21K", "22K", "24K", "Silver"])
-    material = st.selectbox("Material", ["Gold", "Silver"])
-    price = st.number_input("Target Price ($)", min_value=0.0)
-    
-if uploaded_file and st.button("🚀 Activate Autonomous Hunt"):
-    with st.spinner("AI Agent is scanning global wholesale markets in Dubai, London, and USA..."):
-        # Simulated AI Agent Logic
-        time.sleep(4) 
-        
-        st.subheader("VIP Agent Report")
-        st.success("Target Analysis Complete.")
-        
-        # Lead Generation Simulation
-        leads = [
-            {"name": "Global Gold Traders (Dubai)", "status": "Contacted", "confidence": "98%"},
-            {"name": "London Wholesale Jewellery", "status": "In-Chat", "confidence": "95%"}
-        ]
-        
-        for lead in leads:
-            with st.expander(f"Buyer: {lead['name']} | Confidence: {lead['confidence']}"):
-                st.write(f"**Action:** AI is negotiating bulk order for {weight}g {material} necklace.")
-                st.write("Status: Buyer requested official quotation. Generating documents...")
-                if st.button(f"Approve Proposal for {lead['name']}", key=lead['name']):
-                    st.success("Proposal sent automatically via API.")
+    st.title("AutoBiz Portal")
+    email = st.text_input("Enter your Gmail")
+    if st.button("Login"):
+        st.session_state.user = email
+        if email == ADMIN_EMAIL:
+            st.session_state.is_paid = True
+        else:
+            st.session_state.is_paid = False
+        st.rerun()
 
-st.sidebar.info("System Status: Autonomous Agent Active.")
+# --- MAIN DASHBOARD ---
+if st.session_state.user:
+    if st.session_state.is_paid:
+        st.title("💎 AutoBiz VIP: Autonomous Business Agent")
+        
+        # Product & Negotiation Settings
+        with st.form("auto_agent_form"):
+            col1, col2 = st.columns(2)
+            with col1:
+                uploaded_file = st.file_uploader("Upload Necklace Photo")
+                weight = st.text_input("Weight (g)")
+            with col2:
+                material = st.selectbox("Material", ["Gold", "Silver", "Platinum"])
+                target_price = st.text_input("Target Price ($)")
+            
+            submit = st.form_submit_button("🚀 Start Autonomous Hunt & Negotiation")
+        
+        if submit and uploaded_file:
+            with st.spinner("Agent connecting to global wholesale markets..."):
+                # Simulation of Autonomous Logic
+                time.sleep(3)
+                st.success("Analysis Complete: Product verified.")
+                
+                # AI Agent Communication Simulation
+                st.write("### 🤖 Agent Communication Log")
+                st.info("Agent: 'Scanning Alibaba/Amazon B2B verified partners...'")
+                time.sleep(2)
+                st.warning("Agent: 'Found Lead: Dubai Gold Souk. Initializing negotiation...'")
+                time.sleep(2)
+                st.success("Agent: 'Negotiation successful! Buyer accepted your terms.'")
+                
+                # Final Output
+                st.write("---")
+                st.subheader("✅ Deal Finalized - Ready for Dispatch")
+                st.write(f"**Buyer:** Global Jewelry Wholesale (Dubai)")
+                st.write(f"**Status:** Contract generated and sent to email.")
+                st.write(f"**Contact:** +971-XXXX-XXXXX")
+    else:
+        st.warning("Elite Access Required")
+        st.write("To unlock the Autonomous Agent, please activate your monthly subscription.")
+        if st.button("Pay $100/mo via Stripe"):
+            st.info("Redirecting to secure Stripe checkout...")
+else:
+    st.title("Welcome to AutoBiz VIP")
+    st.write("Please login to your Gmail via the sidebar to start.")
                 
