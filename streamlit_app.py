@@ -1,38 +1,54 @@
+import streamlit as st
 import openai
 from twilio.rest import Client
 import smtplib
 from email.message import EmailMessage
 
-# --- REAL API CONFIGURATION (Yahan apni actual Keys dalni hain) ---
-openai.api_key = "YOUR_OPENAI_API_KEY"
-TWILIO_SID = "YOUR_TWILIO_SID"
-TWILIO_AUTH_TOKEN = "YOUR_TWILIO_AUTH_TOKEN"
+# --- CONFIGURATION (Direct Integration) ---
+ADMIN_EMAIL = "shahzebbhutta813@gmail.com"
+MY_WHATSAPP = "+923016372254"
 
-def negotiate_with_buyer(buyer_email, product_details):
-    # GPT-4o real negotiation karega
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": f"Negotiate this: {product_details}"}]
+# --- CORE FUNCTIONS ---
+def send_whatsapp_alert(details):
+    # Twilio API connection
+    client = Client(st.secrets["TWILIO_SID"], st.secrets["TWILIO_AUTH_TOKEN"])
+    message = client.messages.create(
+        body=f"AutoBiz Alert: New Deal! {details}",
+        from_='whatsapp:+14155238886',
+        to=f'whatsapp:{MY_WHATSAPP}'
     )
-    return response.choices[0].message.content
+    return message.sid
 
-def send_real_whatsapp_alert(message):
-    client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
-    client.messages.create(
-        body=message,
-        from_='whatsapp:+14155238886', # Twilio ka number
-        to='whatsapp:+923016372254'    # Aapka number
-    )
-
-def send_real_email(buyer_email, content):
+def send_email_alert(details):
+    # Gmail SMTP connection
     msg = EmailMessage()
-    msg.set_content(content)
-    msg['Subject'] = "Official Business Deal"
-    msg['From'] = "shahzebbhutta813@gmail.com"
-    msg['To'] = buyer_email
+    msg.set_content(f"New Order Details:\n{details}")
+    msg['Subject'] = "Official Order Alert - AutoBiz AI"
+    msg['From'] = ADMIN_EMAIL
+    msg['To'] = ADMIN_EMAIL
     
-    # Gmail SMTP Server connect karein
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-        smtp.login("shahzebbhutta813@gmail.com", "YOUR_APP_PASSWORD")
+        smtp.login(ADMIN_EMAIL, st.secrets["GMAIL_APP_PASSWORD"])
         smtp.send_message(msg)
+
+# --- UI INTERFACE ---
+st.title("💎 AutoBiz AI: Autonomous Sales Agent")
+user_input = st.text_input("Enter login email:")
+
+if user_input == ADMIN_EMAIL:
+    st.write("System Active")
+    # Product Inputs
+    cat = st.selectbox("Category", ["Necklace", "Ring", "Bracelet"])
+    mat = st.selectbox("Material", ["Gold", "Silver"])
+    price = st.number_input("Price ($)")
+    qty = st.number_input("Quantity")
+
+    if st.button("Finalize Deal"):
+        deal_info = f"{qty} pcs of {mat} {cat} at ${price}/g"
+        
+        # Real Integration Calls
+        send_whatsapp_alert(deal_info)
+        send_email_alert(deal_info)
+        
+        st.success("Deal Finalized! Check your WhatsApp and Gmail.")
         
